@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greetings</title>
+    <style>
+        /* ตั้งค่าพื้นหลังทั้งหน้าเป็นสีดำ */
+        body {
+            background-color: #000000; 
+            font-variant-caps: all-petite-caps;
+            margin: 0;
+            padding: 20px;
+            font-family: sans-serif;
+        }
+
+        .widget {
+            /* ตั้งค่าสีตัวอักษรเป็นสีขาว */
+            color: #ffffff;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            max-width: 95%;
+            margin: auto;
+            
+            /* เส้นขอบสีขาว */
+            border: 3px solid #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .greet {
+            font-size: 3em;
+            text-align: center;
+        }
+
+        .date {
+            font-family: monospace;
+            font-size: 1.5em;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .clock {
+            font-family: monospace;
+            font-size: 2em;
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="widget">
+            <div class="greet" id="greet"></div>
+            <div class="date" id="date"></div>
+            <div class="clock">
+                <div id="hour"></div>
+                <div>:</div>
+                <div id="min"></div>
+                <div>:</div>
+                <div id="sec"></div>
+            </div>
+    </div>
+</div>
+
+<script>
+    function dispalyGreetings(today){
+        var hrs = today.getHours();
+        var name = "";
+        var greet = "";
+        if (hrs < 12)
+            greet = 'Good Morning ' + name;
+        else if (hrs >= 12 && hrs <= 17)
+            greet = 'Good Afternoon ' + name;
+        else
+            greet = 'Good Evening ' + name;
+        document.getElementById('greet').innerHTML = greet;
+    }
+
+    function dispalyDate(today) {   
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var dayName = days[today.getDay()];
+        var monthName = monthNames[today.getMonth()];
+        var date = today.getDate();
+        var year = today.getFullYear();
+        document.getElementById('date').innerHTML = dayName + ", " + monthName + " " + date + " " + year;
+    }
+
+    function dispalyClock(today) {
+        var hour = padZeros(twelveHour(today.getHours()));
+        var minutes = padZeros(today.getMinutes());
+        var seconds = padZeros(today.getSeconds());
+        var ampm = today.getHours() >= 12 ? " PM" : " AM";
+        
+        document.getElementById('hour').innerHTML = hour;
+        document.getElementById('min').innerHTML = minutes;
+        // รวมวินาทีและ AM/PM ไว้ด้วยกัน
+        document.getElementById('sec').innerHTML = seconds + ampm;
+    }
+
+    function twelveHour(hour) {
+        if (hour > 12) return hour - 12;
+        if (hour === 0) return 12;
+        return hour;
+    }
+    
+    function padZeros(num) {
+        return num < 10 ? '0' + num : num;
+    }
+
+    function dispalyWidget() {
+        var today = new Date();
+        dispalyGreetings(today);
+        dispalyDate(today);
+        dispalyClock(today);
+        setTimeout(dispalyWidget, 500);
+    }
+
+    dispalyWidget();
+</script>
+
+</body>
+</html>
