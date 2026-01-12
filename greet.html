@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,43 +6,51 @@
     <title>Greetings</title>
 
     <style>
-
-
         body{
             font-variant-caps: all-petite-caps;
-
-
+            background-color: #f0f0f0; /* เพิ่มสีพื้นหลังหน้าเว็บให้อ่อนๆ เพื่อให้ Widget เด่นขึ้น */
         }
 
         .widget {
-            padding: 5px 5px ;
-            color: #000000;
+            padding: 20px; /* ปรับ padding ให้กว้างขึ้นนิดหน่อย */
+            
+            /* --- ส่วนที่แก้ไขสีตัวอักษร --- */
+            color: #ffffff;  /* เปลี่ยนเป็นสีขาว */
+            background-color: #222222; /* เพิ่มพื้นหลังสีเข้ม ไม่งั้นจะมองไม่เห็นตัวหนังสือ */
+            border: 3px solid #ffffff; /* เปลี่ยนขอบเป็นสีขาว */
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.5); /* ปรับเงาให้นุ่มนวลขึ้น */
+            /* ------------------------- */
+
             display: flex;
             justify-content:center;
             align-items:center;
             flex-direction: column;
             max-width: 95%;
             margin: auto;
-            border: 3px solid #000000;
-            border-radius: 5px;
-            box-shadow: 2px 2px 1px 0px #000000;
-
+            border-radius: 15px; /* ปรับมุมให้มนขึ้นอีกนิด */
+            font-family: sans-serif; /* เปลี่ยนฟอนต์ให้อ่านง่ายขึ้น (Option) */
         }
 
-           
         .greet{
             font-size: 3em;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
         .date {
-      
             font-family: monospace;
-            font-size: 2em;
+            font-size: 1.5em; /* ปรับขนาดให้สมดุล */
+            margin-bottom: 10px;
         }
 
         .clock {
             font-family: monospace;
-            font-size: 2em;
+            font-size: 2.5em;
+            font-weight: bold;
+            background: #000000; /* ใส่พื้นหลังสีดำเฉพาะตรงนาฬิกา */
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #00ff00; /* (แถม) ทำตัวเลขนาฬิกาเป็นสีเขียวแบบดิจิทัล หรือจะลบออกเพื่อให้เป็นสีขาวก็ได้ครับ */
         }
 
         .time {
@@ -54,90 +61,78 @@
         .colon {
             font-size: 1em;
             display: inline-block;
+            animation: blink 1s infinite; /* (แถม) ทำให้จุดกระพริบ */
         }
 
-     
-
-
-
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
 
     </style>
 </head>
 <body>
 
-
-
-
-<div class="container>">
+<div class="container">
+    <br><br>
     <div class="widget">
-
             <div class="greet" id="greet"></div>
-
-                <div class="date" id="date"></div>
-                <div class="clock">
-                    <div class="time" id="hour"></div>
-                    <div class="colon">:</div>
-                    <div class="time" id="min"></div>
-                    <div class="colon">:</div>
-                    <div class="time" id="sec"></div>
-                </div>
-           
-
-        
-
+            <div class="date" id="date"></div>
+            
+            <div class="clock">
+                <div class="time" id="hour"></div>
+                <div class="colon">:</div>
+                <div class="time" id="min"></div>
+                <div class="colon">:</div>
+                <div class="time" id="sec"></div>
+            </div>
     </div>
 </div>
-        
-
-
 
 <script>
-
-function dispalyGreetings(today){
+    function dispalyGreetings(today){
         hrs = today.getHours();
         name=""
+        var greet = "";
         if (hrs < 12)
-            greet = 'Good Morning  '+name;
+            greet = 'Good Morning '+name;
         else if (hrs >= 12 && hrs <= 17)
             greet = 'Good Afternoon '+name;
         else if (hrs >= 17 && hrs <= 24)
-            greet = 'Good Evening  '+name;
+            greet = 'Good Evening '+name;
         document.getElementById('greet').innerHTML = greet;
-
     }
 
     function dispalyDate(today) {  
-       
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+          "July", "August", "September", "October", "November", "December"
+        ];
 
         var dayName = days[today.getDay()];
         var monthName = monthNames[today.getMonth()];
         var date = today.getDate();
         var year = today.getFullYear();
-        document.getElementById('date').innerHTML =dayName+", "+monthName+" "+date+" "+year;
-
+        document.getElementById('date').innerHTML = dayName+", "+monthName+" "+date+" "+year;
     }
 
-
     function dispalyClock(today) {
-
         var hour = padZeros(twelveHour(today.getHours()));
         var minutes = padZeros(today.getMinutes());
         var seconds = padZeros(today.getSeconds());
-       
+        
+        var ampm = "";
         if(today.getHours() >=12){
-            seconds+=" pm"
+            ampm =" pm"
         }
         else{
-            seconds+=" am"
+            ampm =" am"
         }
-       
+        
+        // แก้ไขให้ pm/am อยู่ต่อท้ายวินาทีแบบสวยงาม หรือแยกออกมาก็ได้
+        // ในที่นี้ผมรวมไว้กับ seconds ตามโค้ดเดิม
         document.getElementById('hour').innerHTML = hour;
         document.getElementById('min').innerHTML = minutes;
-        document.getElementById('sec').innerHTML = seconds;
+        document.getElementById('sec').innerHTML = seconds + '<span style="font-size:0.5em">' + ampm + '</span>';
     }
 
     function twelveHour(hour) {
@@ -149,6 +144,7 @@ function dispalyGreetings(today){
             return hour
         }
     }
+    
     function padZeros(num) {
         if (num < 10) {
             num = '0' + num
@@ -165,7 +161,6 @@ function dispalyGreetings(today){
     }
 
     dispalyWidget()
-
 </script>
 
 </body>
